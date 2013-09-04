@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head><title>Template Matching Techniques in Computer Vision:
+Theory and Practice
+the code companion</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html,index=2,3 --> 
+<meta name="src" content="tmCodeCompanion.tex"> 
+<meta name="date" content="2009-04-06 11:28:00"> 
+<link rel="stylesheet" type="text/css" href="tmCodeCompanion.css"> 
+</head>
+<body>
+
+<div >
+     <p style="clear: left; position: relative; top: 5; text-align: center;">
+      <a href="http://www.fbk.eu">Fondazione Bruno Kessler</a> - <a href="http://tev.fbk.eu"> Technologies of Vision</a>
+</p>
+<p style="clear: left; position: relative; top: 5; text-align: center; font-size:72%;">
+      contains material from <br>
+      <a href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470517069.html"> 
+       Template Matching Techniques in Computer Vision: Theory and Practice
+      </a> <br>
+      Roberto Brunelli © 2009 John Wiley &amp; Sons, Ltd
+     </p>
+
+</div>
+
+
+<!--l. 77--><p class="noindent" >
+                                                                                      
+                                                                                      
+<!--l. 79--><p class="indent" >   &#x00A0;
+   <div class="maketitle">
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+<h2 class="titleHead">Template Matching Techniques in Computer Vision:<br />
+Theory and Practice<br />
+the code companion</h2>
+ <div class="author" ><span 
+class="aer12-">Roberto Brunelli</span></div>
+<br />
+<div class="date" ><span 
+class="aer12-">April 6, 2009</span></div>
+                                                                                      
+                                                                                      
+   </div>
+                                                                                      
+                                                                                      
+   <div class="tableofcontents">
+   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli1.html#x2-1000" id="QQ2-2-1">Contents</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli2.html#x3-2000" id="QQ2-3-2">Preface</a></span>
+<br />   <span class="chapterToc" >1 <a 
+href="tmCodeCompanionch1.html#x4-30001" id="QQ2-4-3">Introduction</a></span>
+<br />   &#x00A0;<span class="sectionToc" >1.1 <a 
+href="tmCodeCompanionse1.html#x5-40001.1" id="QQ2-5-4">The software environment</a></span>
+<br />   &#x00A0;<span class="sectionToc" >1.2 <a 
+href="tmCodeCompanionse2.html#x6-50001.2" id="QQ2-6-5">Basic template matching</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli3.html#x7-60001.2" id="QQ2-7-10">Bibliography</a></span>
+<br />   <span class="chapterToc" >2 <a 
+href="tmCodeCompanionch2.html#x8-70002" id="QQ2-8-11">The Imaging Process</a></span>
+<br />   &#x00A0;<span class="sectionToc" >2.1 <a 
+href="tmCodeCompanionse3.html#x9-80002.1" id="QQ2-9-12">Image distortions</a></span>
+<br />   &#x00A0;<span class="sectionToc" >2.2 <a 
+href="tmCodeCompanionse4.html#x10-90002.2" id="QQ2-10-15">Diffraction Effects</a></span>
+<br />   &#x00A0;<span class="sectionToc" >2.3 <a 
+href="tmCodeCompanionse5.html#x11-100002.3" id="QQ2-11-17">Noise</a></span>
+<br />   &#x00A0;<span class="sectionToc" >2.4 <a 
+href="tmCodeCompanionse6.html#x12-110002.4" id="QQ2-12-19">Digital imaging artifacts</a></span>
+<br />   &#x00A0;<span class="sectionToc" >2.5 <a 
+href="tmCodeCompanionse7.html#x13-140002.5" id="QQ2-13-24">Image resampling</a></span>
+<br />   &#x00A0;<span class="sectionToc" >2.6 <a 
+href="tmCodeCompanionse8.html#x14-150002.6" id="QQ2-14-27">Log-polar imaging </a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli4.html#x15-160002.6" id="QQ2-15-29">Bibliography</a></span>
+<br />   <span class="chapterToc" >3 <a 
+href="tmCodeCompanionch3.html#x16-170003" id="QQ2-16-30">Template Matching as Testing</a></span>
+<br />   &#x00A0;<span class="sectionToc" >3.1 <a 
+href="tmCodeCompanionse9.html#x17-180003.1" id="QQ2-17-31">The ROC curve</a></span>
+<br />   &#x00A0;<span class="sectionToc" >3.2 <a 
+href="tmCodeCompanionse10.html#x18-190003.2" id="QQ2-18-33">The normalized correlation coefficient</a></span>
+<br />   &#x00A0;<span class="sectionToc" >3.3 <a 
+href="tmCodeCompanionse11.html#x19-200003.3" id="QQ2-19-35">Stein estimation</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli5.html#x20-210003.3" id="QQ2-20-38">Bibliography</a></span>
+<br />   <span class="chapterToc" >4 <a 
+href="tmCodeCompanionch4.html#x21-220004" id="QQ2-21-39">Robust Similarity Estimators</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.1 <a 
+href="tmCodeCompanionse12.html#x22-230004.1" id="QQ2-22-40">Validity of distributional hypotheses</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.2 <a 
+href="tmCodeCompanionse13.html#x23-240004.2" id="QQ2-23-44">Tanh estimators</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.3 <a 
+href="tmCodeCompanionse14.html#x24-250004.3" id="QQ2-24-47"><span 
+class="cmmi-10x-x-109">L</span><sub><span 
+class="cmr-8">1</span></sub> similarity measures</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli6.html#x25-260004.3" id="QQ2-25-49">Bibliography</a></span>
+<br />   <span class="chapterToc" >5 <a 
+href="tmCodeCompanionch5.html#x26-270005" id="QQ2-26-50">Ordinal Matching Measures</a></span>
+<br />   &#x00A0;<span class="sectionToc" >5.1 <a 
+href="tmCodeCompanionse15.html#x27-280005.1" id="QQ2-27-51">Histogram equalization</a></span>
+<br />   &#x00A0;<span class="sectionToc" >5.2 <a 
+href="tmCodeCompanionse16.html#x28-290005.2" id="QQ2-28-53">Ordinal Correlation Measures</a></span>
+<br />   &#x00A0;<span class="sectionToc" >5.3 <a 
+href="tmCodeCompanionse17.html#x29-300005.3" id="QQ2-29-55">Bhat-Nayar correlation</a></span>
+<br />   &#x00A0;<span class="sectionToc" >5.4 <a 
+href="tmCodeCompanionse18.html#x30-310005.4" id="QQ2-30-57">Non Parametric Local Transforms</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli7.html#x31-320005.4" id="QQ2-31-62">Bibliography</a></span>
+<br />   <span class="chapterToc" >6 <a 
+href="tmCodeCompanionch6.html#x32-330006" id="QQ2-32-63">Matching Variable Patterns</a></span>
+<br />   &#x00A0;<span class="sectionToc" >6.1 <a 
+href="tmCodeCompanionse19.html#x33-340006.1" id="QQ2-33-64">Maximizing SNR over class samples</a></span>
+<br />   &#x00A0;<span class="sectionToc" >6.2 <a 
+href="tmCodeCompanionse20.html#x34-350006.2" id="QQ2-34-68">Multi-class Synthetic Discriminant Functions</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli8.html#x35-360006.2" id="QQ2-35-71">Bibliography</a></span>
+<br />   <span class="chapterToc" >7 <a 
+href="tmCodeCompanionch7.html#x36-370007" id="QQ2-36-72">Matching Linear Structure: the Hough Transform</a></span>
+<br />   &#x00A0;<span class="sectionToc" >7.1 <a 
+href="tmCodeCompanionse21.html#x37-380007.1" id="QQ2-37-73">Edge detection</a></span>
+<br />   &#x00A0;<span class="sectionToc" >7.2 <a 
+href="tmCodeCompanionse22.html#x38-390007.2" id="QQ2-38-76">The Hough Transform</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli9.html#x39-400007.2" id="QQ2-39-79">Bibliography</a></span>
+                                                                                      
+                                                                                      
+<br />   <span class="chapterToc" >8 <a 
+href="tmCodeCompanionch8.html#x40-410008" id="QQ2-40-80">Low Dimensionality Representations and Matching</a></span>
+<br />   &#x00A0;<span class="sectionToc" >8.1 <a 
+href="tmCodeCompanionse23.html#x41-420008.1" id="QQ2-41-81">Principal component analysis</a></span>
+<br />   &#x00A0;<span class="sectionToc" >8.2 <a 
+href="tmCodeCompanionse24.html#x42-430008.2" id="QQ2-42-85">James-Stein estimation</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli10.html#x43-440008.2" id="QQ2-43-87">Bibliography</a></span>
+<br />   <span class="chapterToc" >9 <a 
+href="tmCodeCompanionch9.html#x44-450009" id="QQ2-44-88">Deformable Templates</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli11.html#x45-460009" id="QQ2-45-89">Bibliography</a></span>
+<br />   <span class="chapterToc" >10 <a 
+href="tmCodeCompanionch10.html#x46-4700010" id="QQ2-46-90">Computational Aspects of Template Matching</a></span>
+<br />   &#x00A0;<span class="sectionToc" >10.1 <a 
+href="tmCodeCompanionse25.html#x47-4800010.1" id="QQ2-47-91">Hierarchical matching</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli12.html#x48-4900010.1" id="QQ2-48-92">Bibliography</a></span>
+<br />   <span class="chapterToc" >11 <a 
+href="tmCodeCompanionch11.html#x49-5000011" id="QQ2-49-93">Matching Points Sets: the Hausdorff distance</a></span>
+<br />   &#x00A0;<span class="sectionToc" >11.1 <a 
+href="tmCodeCompanionse26.html#x50-5100011.1" id="QQ2-50-94">Hausdorff matching</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli13.html#x51-5200011.1" id="QQ2-51-96">Bibliography</a></span>
+<br />   <span class="chapterToc" >12 <a 
+href="tmCodeCompanionch12.html#x52-5300012" id="QQ2-52-97">Support Vector Machines And Friends</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli14.html#x53-5400012" id="QQ2-53-98">Bibliography</a></span>
+<br />   <span class="chapterToc" >13 <a 
+href="tmCodeCompanionch13.html#x54-5500013" id="QQ2-54-99">Feature Templates</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli15.html#x55-5600013" id="QQ2-55-100">Bibliography</a></span>
+<br />   <span class="chapterToc" >14 <a 
+href="tmCodeCompanionch14.html#x56-5700014" id="QQ2-56-101">Building a Multi-biometric System</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli16.html#x57-5800014" id="QQ2-57-102">Bibliography</a></span>
+<br />   <span class="appendixToc" >A <a 
+href="tmCodeCompanionap1.html#x58-59000A" id="QQ2-58-103">AnImAl: a Software Environment for Fast Prototyping</a></span>
+<br />   &#x00A0;<span class="sectionToc" >A.1 <a 
+href="tmCodeCompanionse27.html#x59-60000A.1" id="QQ2-59-104">The AnImAl environment</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli17.html#x60-61000A.1" id="QQ2-60-109">Bibliography</a></span>
+<br />   <span class="appendixToc" >B <a 
+href="tmCodeCompanionap2.html#x61-62000B" id="QQ2-61-110">Synthetic Oracles for Algorithm Development</a></span>
+<br />   &#x00A0;<span class="sectionToc" >B.1 <a 
+href="tmCodeCompanionse28.html#x62-63000B.1" id="QQ2-62-111">Thematic maps</a></span>
+<br />   &#x00A0;<span class="sectionToc" >B.2 <a 
+href="tmCodeCompanionse29.html#x63-64000B.2" id="QQ2-63-113">Color rendering</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli18.html#x64-65000B.2" id="QQ2-64-116">Bibliography</a></span>
+<br />   <span class="appendixToc" >C <a 
+href="tmCodeCompanionap3.html#x65-66000C" id="QQ2-65-117">On Evaluation</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli19.html#x66-67000C" id="QQ2-66-118">Bibliography</a></span>
+<br />   <span class="appendixToc" >D <a 
+href="tmCodeCompanionap4.html#x67-68000D" id="QQ2-67-119">Template Matching Literature</a></span>
+<br />   <span class="likechapterToc" ><a 
+href="tmCodeCompanionli20.html#x68-69000D" id="QQ2-68-120">Bibliography</a></span>
+   </div>
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+<a 
+ id="x1-58008r101"></a>
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+<a 
+ id="x1-61028r101"></a>
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+<a 
+ id="x1-65019r101"></a>
+                                                                                      
+                                                                                      
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+<a 
+ id="x1-67021r101"></a>
+                                                                                      
+                                                                                      
+ 
+</body></html> 
+
+                                                                                      
+
+
