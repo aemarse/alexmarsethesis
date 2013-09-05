@@ -1,18 +1,37 @@
-function [] = plotData(filename, N, hopSize, fftSize)
+function [] = plotData(sig, features, params)
 
-try
-    [sig fs] = wavread(filename);
-catch
-    sprintf('Could not read in file %s\nDeleting...', filename)
-    delete(filename);
-    delete(sprintf('%s%s', filename(1:end-3), 'mat'));
-    return
-end
-
-[T, F, sFinal] = getSpectrum(sig, N, hopSize, fftSize);
+% try
+%     [sig fs] = wavread(filename);
+% catch
+%     sprintf('Could not read in file %s\nDeleting...', filename)
+%     delete(filename);
+%     delete(sprintf('%s%s', filename(1:end-3), 'mat'));
+%     return
+% end
+clf
+close all
 
 figure
-imagesc(T, F, sFinal)
-axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
+subplot(2,1,1), plot(sig); ...
+    axis tight; ...
+    xlabel('Time'); ...
+    ylabel('Amplitude');...
+    title('Signal');
+
+subplot(2,1,2), plot(features.RMS); ...
+    axis tight; ...
+    xlabel('Time'); ...
+    ylabel('Intensity');...
+    title('RMS');
+
+% T      = features.SPEC.T;
+% F      = features.SPEC.F;
+% sFinal = features.SPEC.sFinal;
+
+% [T, F, sFinal] = getSpectrum(sig, N, hopSize, fftSize);
+
+% figure
+% imagesc(T, F, sFinal)
+% axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
 
 end
