@@ -41,7 +41,7 @@ numSpecies = size(species,2);
 s_baseUrl = 'http://www.xeno-canto.org/api/recordings.php';
 s_extUrl  = '?query=';
 
-for i = 1:length(species)
+for i = 1:1%length(species)
     
     %-Craft the url to be called
     s_theUrl  = [s_baseUrl s_extUrl species{i}];
@@ -56,7 +56,7 @@ for i = 1:length(species)
     numRecordings = str2num(json_struct.numRecordings);
     
     %-Loop through the recordings
-    for h = 1:numRecordings
+    for h = 1:10%numRecordings
         
         %-Save them to a struct
         metadata = json_struct.recordings{h};
@@ -66,7 +66,7 @@ for i = 1:length(species)
             metadata.en '_' metadata.id];
     
         %-Write the audio file
-        urlwrite(metadata.file, sprintf('%s.wav', soundFile));
+        urlwrite(metadata.file, sprintf('%s.mp3', soundFile));
     
         theDir = sprintf('%s', soundFile);
         

@@ -51,11 +51,11 @@ for i = 1:numOfQueries
         sound_type = metadata.type;
         soundUrl   = [sound_url, quest, api_key];
         
-        theFile = [dataDir, metadata.original_filename];
+        soundFile = [dataDir, metadata.original_filename];
         
-        urlwrite(soundUrl, theFile);
+        urlwrite(soundUrl, soundFile);
         
-        theDir = sprintf('%s', theFile);
+        theDir = sprintf('%s', soundFile(1:end-4));
         
         %-Save the struct for the file
         save(theDir, 'metadata');
@@ -63,8 +63,5 @@ for i = 1:numOfQueries
     end
     
 end
-
-%-Save the labels to a file
-save 'soundData.mat' soundData;
 
 end
