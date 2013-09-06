@@ -21,6 +21,6 @@ params.Nfft = Nfft;
 
 [frame features] = getFrames(sig, params);
 
-plotData(sig, features, params);
+plotData(sig, features, params, fs);
 
 end

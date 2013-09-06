@@ -1,4 +1,4 @@
-function [] = plotData(sig, features, params)
+function [] = plotData(sig, features, params, fs)
 
 % try
 %     [sig fs] = wavread(filename);
@@ -11,6 +11,9 @@ function [] = plotData(sig, features, params)
 clf
 close all
 
+%--------------------------------------------------------------------------
+%                               Plot RMS
+%--------------------------------------------------------------------------
 figure
 subplot(2,1,1), plot(sig); ...
     axis tight; ...
@@ -24,14 +27,39 @@ subplot(2,1,2), plot(features.RMS); ...
     ylabel('Intensity');...
     title('RMS');
 
-T = features.SPEC.T;
-F = features.SPEC.F;
-S = features.SPEC.S;
 
-% [T, F, sFinal] = getSpectrum(sig, N, hopSize, fftSize);
+%--------------------------------------------------------------------------
+%                               Plot FFT
+%--------------------------------------------------------------------------
+
+[S, F, T] = spectrogram(sig, params.N, params.H, params.Nfft);
+
+S = log10(abs(S)+eps);
+
+temp = floor(size(S,1)/2);
+
+S = S(1:temp,:);
+
+F = F/abs(max(F))*fs;
+
+F = F(1:temp);
 
 figure
 imagesc(T, F, S)
 axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
+
+% Nfft = params.Nfft;
+
+% F = [0 : Nfft - 1] / Nfft;
+% plot(F, abs(FFT));
+
+% X = fftshift(features.FFT(1,:));
+% F = [-Nfft/2:Nfft/2-1]/Nfft;
+% plot(F,X),
+% xlabel('frequency / f s')
+
+% T = features.SPEC.T;
+% F = features.SPEC.F;
+% S = features.SPEC.S;
 
 end
