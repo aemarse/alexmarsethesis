@@ -13,14 +13,22 @@ for i = 1:numFrames
    
    frame = sig(startIdx:endIdx) .* theWin;
    
-   [RMS(i)] = getFeatures(frame, params, i);
+   [RMS(i), spec] = getFeatures(frame, params, i);
+   
+   T(i)        = spec.T;
+   F(i,:)      = spec.F;
+   sFinal(i,:) = spec.sFinal;
    
    startIdx = startIdx + params.H;
    endIdx   = endIdx + params.H;
    
 end
 
+SPEC.T = T;
+SPEC.F = F;
+SPEC.S = sFinal;
+
 features.RMS  = RMS;
-% features.SPEC = SPEC;
+features.SPEC = SPEC;
 
 end

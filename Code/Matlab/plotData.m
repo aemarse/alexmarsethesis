@@ -24,14 +24,14 @@ subplot(2,1,2), plot(features.RMS); ...
     ylabel('Intensity');...
     title('RMS');
 
-% T      = features.SPEC.T;
-% F      = features.SPEC.F;
-% sFinal = features.SPEC.sFinal;
+T = features.SPEC.T;
+F = features.SPEC.F;
+S = features.SPEC.S;
 
 % [T, F, sFinal] = getSpectrum(sig, N, hopSize, fftSize);
 
-% figure
-% imagesc(T, F, sFinal)
-% axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
+figure
+imagesc(T, F, S)
+axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
 
 end
