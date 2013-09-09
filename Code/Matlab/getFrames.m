@@ -1,36 +1,40 @@
-function [frame features] = getFrames(sig, params)
+function [features] = getFrames(sig, params)
 
 theWin = hamming(params.N);
 
 numFrames = floor((length(sig) - (params.N - params.H)) / params.H);
 
-frame = zeros(numFrames, params.N);
+curr = zeros(1, params.N);
+past = zeros(1, params.N);
 
 startIdx = 1;
 endIdx   = params.N;
 
 for i = 1:numFrames
    
-   frame = sig(startIdx:endIdx) .* theWin;
+   if i == 1
+       curr = sig(startIdx:endIdx) .* theWin;
+   else
+       curr = sig(startIdx:endIdx) .* theWin;
+   end
    
-   [RMS(i), FFT(i,:)] = getFeatures(frame, params, i);
-   
-%    T(i)        = spec.T;
-%    F(i,:)      = spec.F;
-%    sFinal(i,:) = spec.sFinal;
-   
+   [RMS(i), FFT(i,:), ZCR(i,:), SF(i,:), S_ENV(i,:), SC(i)] = ...
+       getFeatures(past, curr, params, i);
+
    startIdx = startIdx + params.H;
    endIdx   = endIdx + params.H;
    
+   past = curr;
+   
 end
 
-% SPEC.T = T;
-% SPEC.F = F;
-% SPEC.S = sFinal;
+[RMS, ZCR] = normalizeFeats(RMS, ZCR);
 
-features.RMS  = RMS;
-features.FFT  = FFT;
-
-% features.SPEC = SPEC;
+features.RMS   = RMS;
+features.FFT   = FFT;
+features.ZCR   = ZCR;
+features.SF    = SF(2,:);
+features.S_ENV = S_ENV;
+features.SC    = SC;
 
 end

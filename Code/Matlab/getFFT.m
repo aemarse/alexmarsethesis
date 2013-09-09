@@ -1,7 +1,8 @@
-function [FFT] = getFFT(frame, params)
+function [p_FFT, c_FFT] = getFFT(past, curr, params)
 
 Nfft = params.Nfft;
 
-FFT = abs(fft(frame, Nfft));
+p_FFT = abs(fft(past, Nfft));
+c_FFT = abs(fft(curr, Nfft));
 
 end

@@ -13,14 +13,23 @@ if size(sig, 2) == 2
     sig = (sig(:,1) + sig(:,2) / 2);
 end
 
+% fc1 = 500/fs;
+% fc2 = 10000/fs;
+% 
+% sig = filterSig(sig, fc1, fc2);
+
 sig = sig/max(abs(sig));
 
-params.N    = N;
-params.H    = H;
-params.Nfft = Nfft;
+params.N        = N;
+params.H        = H;
+params.Nfft     = Nfft;
+params.fs       = fs;
+params.filename = filename;
 
-[frame features] = getFrames(sig, params);
+[features] = getFrames(sig, params);
 
 plotData(sig, features, params, fs);
+
+sound(sig, fs);
 
 end

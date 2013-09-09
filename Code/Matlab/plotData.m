@@ -14,19 +14,27 @@ close all
 %--------------------------------------------------------------------------
 %                               Plot RMS
 %--------------------------------------------------------------------------
-figure
-subplot(2,1,1), plot(sig); ...
+figure('name', params.filename)
+
+numPlots = length(features) - 1;
+
+subplot(3,1,1), plot(sig); ...
     axis tight; ...
     xlabel('Time'); ...
     ylabel('Amplitude');...
     title('Signal');
 
-subplot(2,1,2), plot(features.RMS); ...
+subplot(3,1,2), plot(features.RMS); ...
     axis tight; ...
     xlabel('Time'); ...
     ylabel('Intensity');...
     title('RMS');
 
+subplot(3,1,3), plot(features.ZCR); ...
+    axis tight; ...
+    xlabel('Time'); ...
+    ylabel('# ZCs per sec');...
+    title('ZCR');
 
 %--------------------------------------------------------------------------
 %                               Plot FFT
@@ -34,7 +42,8 @@ subplot(2,1,2), plot(features.RMS); ...
 
 [S, F, T] = spectrogram(sig, params.N, params.H, params.Nfft);
 
-S = log10(abs(S)+eps);
+S = 20*log10(abs(S)+eps);
+% S = abs(S);
 
 temp = floor(size(S,1)/2);
 
@@ -44,10 +53,13 @@ F = F/abs(max(F))*fs;
 
 F = F(1:temp);
 
-figure
+figure('name', params.filename)
 imagesc(T, F, S)
 axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
+title('Log magnitude spectrum')
 
+
+%---BLAH----
 % Nfft = params.Nfft;
 
 % F = [0 : Nfft - 1] / Nfft;
