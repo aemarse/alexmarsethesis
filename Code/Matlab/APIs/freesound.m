@@ -1,6 +1,7 @@
 function [] = freesound()
 
-dataDir = './data/freesound/';
+% dataDir = './data/freesound/';
+dataDir = '/Volumes/ALEX/data/freesound/';
 
 %-The elements of the Freesound API call
 base_url = 'http://www.freesound.org/api/sounds/search';

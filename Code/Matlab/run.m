@@ -1,5 +1,14 @@
 function [] = run(filename, N, H, Nfft)
 
+fileDir  = '/Volumes/ALEX/data/xeno_canto/';
+filename = sprintf('%s%s', fileDir, filename);
+
+% if strcmp(filename(end-2:end), 'mp3') == 0 || ...
+%    strcmp(filename(end-2:end), 'wav') == 0
+%     disp('The filename you entered must include the extension ''.wav'' or ''.mp3''')
+%     return
+% end
+
 try
     [sig fs] = wavread(filename);
 catch

@@ -1,6 +1,7 @@
 function [] = xeno_canto()
 
-dataDir = './data/xeno_canto/';
+% dataDir = './data/xeno_canto/';
+dataDir = '/Volumes/ALEX/data/xeno_canto/';
 
 species = {
     'Ring-billed+gull', 
@@ -34,14 +35,14 @@ species = {
     'Common+grackle'
     };
 
-species = species(1:2);
+species = species(19:end);
 
 numSpecies = size(species,2);
 
 s_baseUrl = 'http://www.xeno-canto.org/api/recordings.php';
 s_extUrl  = '?query=';
 
-for i = 1:1%length(species)
+for i = 1:length(species)
     
     %-Craft the url to be called
     s_theUrl  = [s_baseUrl s_extUrl species{i}];
@@ -55,18 +56,27 @@ for i = 1:1%length(species)
     %-Figure out how many recordings we are getting
     numRecordings = str2num(json_struct.numRecordings);
     
+    %-Make a new dir for each species
+    speciesDir = [json_struct.recordings{i}.en '/'];
+    [s,m,mid]  = mkdir(dataDir, speciesDir);
+    newDir     = [dataDir speciesDir];
+    
+    fprintf('Writing audio files for %s\n', json_struct.recordings{i}.en);
+    
     %-Loop through the recordings
-    for h = 1:10%numRecordings
+    for h = 1:numRecordings
         
         %-Save them to a struct
         metadata = json_struct.recordings{h};
 
         %-Make the soundFile name
-        soundFile = [dataDir metadata.gen ' ' metadata.sp '_' ...
+        soundFile = [newDir metadata.gen ' ' metadata.sp '_' ...
             metadata.en '_' metadata.id];
-    
+        
         %-Write the audio file
         urlwrite(metadata.file, sprintf('%s.mp3', soundFile));
+    
+        fprintf(' %d/%d \n', h, numRecordings);
     
         theDir = sprintf('%s', soundFile);
         
