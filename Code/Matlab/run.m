@@ -1,20 +1,40 @@
 function [] = run(filename, N, H, Nfft)
 
 fileDir  = '/Volumes/ALEX/data/xeno_canto/';
-filename = sprintf('%s%s', fileDir, filename);
 
-% if strcmp(filename(end-2:end), 'mp3') == 0 || ...
-%    strcmp(filename(end-2:end), 'wav') == 0
-%     disp('The filename you entered must include the extension ''.wav'' or ''.mp3''')
-%     return
-% end
+a = dir(fileDir);
+b = struct2cell(a);
 
-try
-    [sig fs] = wavread(filename);
-catch
-    sprintf('Could not read in file %s\nDeleting it now...', filename)
-    delete(filename);
-    delete(sprintf('%s%s', filename(1:end-3), 'mat'));
+for i = 4:size(b,2)
+    tempDir = [fileDir b{1,i} '/'];
+    
+    x = struct2cell(dir(tempDir));
+    
+    for h = 1:size(x,2)
+        if strcmp(x{1,h}, filename)
+            theDir = tempDir;
+        end
+    end
+end
+
+filename = sprintf('%s%s', theDir, filename);
+
+if strcmp(filename(end-2:end), 'mp3')
+    try
+        [sig fs] = mp3read(filename);
+    catch
+        r = removeFile(filename);
+        return
+    end
+elseif strcmp(filename(end-2:end), 'wav')
+    try
+        [sig fs] = wavread(filename);
+    catch
+        r = removeFile(filename);
+        return
+    end
+else
+    sprintf('Couldn''t read the file, for some unknown reason...must be a ghost!')
     return
 end
 
@@ -23,7 +43,7 @@ if size(sig, 2) == 2
 end
 
 % fc1 = 500/fs;
-% fc2 = 10000/fs;
+% fc2 = 8000/fs;
 % 
 % sig = filterSig(sig, fc1, fc2);
 
