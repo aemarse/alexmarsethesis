@@ -2,6 +2,35 @@ function [] = run(filename, N, H, Nfft)
 
 fileDir  = '/Volumes/ALEX/data/xeno_canto/';
 
+[sig fs] = readFile(fileDir, filename);
+
+if size(sig, 2) == 2
+    sig = (sig(:,1) + sig(:,2) / 2);
+end
+
+% fc1 = 500/fs;
+% fc2 = 8000/fs;
+% 
+% sig = filterSig(sig, fc1, fc2);
+
+sig = sig/max(abs(sig));
+
+params.N        = N;
+params.H        = H;
+params.Nfft     = Nfft;
+params.fs       = fs;
+params.filename = filename;
+
+[features] = getFrames(sig, params);
+
+plotData(sig, features, params, fs);
+
+sound(sig, fs);
+
+end
+
+function [sig fs] = readFile(fileDir, filename)
+
 a = dir(fileDir);
 b = struct2cell(a);
 
@@ -37,28 +66,5 @@ else
     sprintf('Couldn''t read the file, for some unknown reason...must be a ghost!')
     return
 end
-
-if size(sig, 2) == 2
-    sig = (sig(:,1) + sig(:,2) / 2);
-end
-
-% fc1 = 500/fs;
-% fc2 = 8000/fs;
-% 
-% sig = filterSig(sig, fc1, fc2);
-
-sig = sig/max(abs(sig));
-
-params.N        = N;
-params.H        = H;
-params.Nfft     = Nfft;
-params.fs       = fs;
-params.filename = filename;
-
-[features] = getFrames(sig, params);
-
-plotData(sig, features, params, fs);
-
-sound(sig, fs);
 
 end
