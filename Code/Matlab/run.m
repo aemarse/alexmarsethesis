@@ -21,6 +21,8 @@ params.Nfft     = Nfft;
 params.fs       = fs;
 params.filename = filename;
 
+sinMod(sig, params);
+
 [features] = getFrames(sig, params);
 
 plotData(sig, features, params, fs);

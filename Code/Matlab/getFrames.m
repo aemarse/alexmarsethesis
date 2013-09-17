@@ -12,12 +12,14 @@ endIdx   = params.N;
 
 for i = 1:numFrames
    
-   if i == 1
-       curr = sig(startIdx:endIdx) .* theWin;
-   else
-       curr = sig(startIdx:endIdx) .* theWin;
-   end
-   
+%    if i == 1
+%        curr = sig(startIdx:endIdx) .* theWin;
+%    else
+%        curr = sig(startIdx:endIdx) .* theWin;
+%    end
+
+   curr = sig(startIdx:endIdx) .* theWin;   
+
    [RMS(i), FFT(i,:), ZCR(i,:), SF(i,:), S_ENV(i,:), SC(i)] = ...
        getFeatures(past, curr, params, i);
 

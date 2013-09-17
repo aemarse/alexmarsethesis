@@ -1,0 +1,94 @@
+ % main.tex
+ % LaTeX template for NYU music technology master's thesis
+ % Author: M. Farbood
+ 
+
+\documentclass[12pt]{article}
+
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{cite}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define an Acknowledgements page format
+\makeatletter
+\newcommand\ackname{Acknowledgements}
+\if@titlepage
+  \newenvironment{acknowledgements}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \ackname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{acknowledgements}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \ackname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% Title and Author
+\author{Firstname M. Lastname} 
+\title{My Wonderful Thesis}
+\date{}
+\maketitle
+
+\vspace{75mm}
+
+\begin{center}
+Submitted in partial fulfillment of the requirements for the \\
+Master of Music in Music Technology \\
+in the Department of Music and Performing Arts Professions \\
+Steinhardt School \\
+New York University \\
+
+\vspace{10mm}
+
+Advisor: TheNameOfYourAdvisor \\
+Reader: TheNameOfYour2ndReader \\
+
+\vspace{10mm}
+\date{\today}
+\end{center}
+\thispagestyle{empty}
+
+
+% Included sections
+% This document is single-sided
+\include{abstract}
+\include{acknowledgments}
+\include{contents}
+
+\include{introduction}
+\include{background}
+\include{methodology}
+\include{analysis}
+\include{conclusions}
+% Add more chapters as necessary...
+
+\include{bibliography}
+\appendix 
+\include{appendix}
+
+\end{document}

@@ -1,8 +1,18 @@
 function [RMS, FFT, ZCR, SF, S_ENV, SC] = getFeatures(past, curr, params, i)
 
 RMS            = getRMS(curr);
-[p_FFT, c_FFT] = getFFT(past, curr, params);
 ZCR            = getZCR(curr, params);
+
+[p_FFT, c_FFT]  = getFFT(past, curr, params);
+% [maxVal maxPos] = max(abs(c_FFT));
+% 
+% Wn = maxPos;
+% Fn = maxVal;
+% 
+% An = 20 * log10(abs(c_FFT(Fn, Wn)));
+
+p_FFT          = abs(p_FFT);
+c_FFT          = abs(c_FFT);
 S_ENV          = getS_ENV(p_FFT, params);
 SC             = getSC(p_FFT, params);
 
