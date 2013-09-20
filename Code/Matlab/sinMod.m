@@ -1,5 +1,7 @@
 function [] = sinMod(sig, params)
 
+%-Gets the spectrogram and plots it using imagesc
+
 % [S,F,T,P] = spectrogram(sig, params.N, params.N - params.H, params.Nfft);
 % 
 % S = 20*log10(abs(S)+eps);
@@ -19,29 +21,32 @@ function [] = sinMod(sig, params)
 % 
 % T = 30;
 
+%-Gets the number of frames, sub-windowing parameters
 numFrames = floor((length(sig) - (params.N - params.H)) / params.H);
 
 startIdx = 1;
 endIdx   = params.N;
 
+N = 256;
+H = 64;
+Nfft = 1024;
+
+%-Loops through frames, gets spectrogram for each, computes max, 
 for n = 1:numFrames
     
-    FFT(:,n) = abs(fft(sig(startIdx:endIdx), params.Nfft));
+    [S,F,T,P] = spectrogram(sig(startIdx:endIdx), N, N-H, Nfft);
     
-    [maxVal maxLoc] = max(FFT(:,n));
-    
-    maxAmpDb(n) = 20*log10(maxVal);
-    maxFreq(n)  = maxLoc;
-    
-    if n == 1
-        [startIdx endIdx] = updateIdx(startIdx, endIdx, params.H);
-        continue
-    else
-%         lookLeft(maxAmpDb, maxFreq, n, FFT);
+    for i = 1:size(S,2)
+        
+        [maxVal(i) maxLoc(i)] = max(abs(S(:,i)));
+        
+        Wn(1) = maxLoc(i);
+        An(1) = 20*log10(abs(S(maxLoc(i),i)));
+        
     end
     
     [startIdx endIdx] = updateIdx(startIdx, endIdx, params.H);
-
+    
     %{
     [Fn Tn] = max(abs(S(:,n)));
     
@@ -68,6 +73,24 @@ for n = 1:numFrames
 
         end
     end
+    %}
+    
+    %{
+    FFT(:,n) = abs(fft(sig(startIdx:endIdx), params.Nfft));
+    
+    [maxVal maxLoc] = max(FFT(:,n));
+    
+    maxAmpDb(n) = 20*log10(maxVal);
+    maxFreq(n)  = maxLoc;
+    
+    if n == 1
+        [startIdx endIdx] = updateIdx(startIdx, endIdx, params.H);
+        continue
+    else
+        lookLeft(maxAmpDb, maxFreq, n, FFT);
+    end
+    
+    [startIdx endIdx] = updateIdx(startIdx, endIdx, params.H);
     %}
 
 end
