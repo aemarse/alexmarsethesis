@@ -20,8 +20,8 @@ for i = 1:numFrames
 
    curr = sig(startIdx:endIdx) .* theWin;   
 
-   [RMS(i), FFT(i,:), ZCR(i,:), SF(i,:), S_ENV(i,:), SC(i)] = ...
-       getFeatures(past, curr, params, i);
+   [RMS(i), FFT(i,:), ZCR(i,:), SF(i,:), S_ENV(i,:), SC(i), MFCCs(i,:)] ...
+       = getFeatures(past, curr, params, i);
 
    startIdx = startIdx + params.H;
    endIdx   = endIdx + params.H;
@@ -38,5 +38,6 @@ features.ZCR   = ZCR;
 features.SF    = SF(2,:);
 features.S_ENV = S_ENV;
 features.SC    = SC;
+features.MFCCs = MFCCs(:,2:end);
 
 end
