@@ -21,7 +21,7 @@ params.Nfft     = Nfft;
 params.fs       = fs;
 params.filename = filename;
 
-sineMod2(sig, params);
+% sineMod2(sig, params);
 
 [features] = getFrames(sig, params);
 
