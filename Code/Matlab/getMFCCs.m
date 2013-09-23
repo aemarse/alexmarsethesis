@@ -4,6 +4,7 @@ magSpec = magSpec(1:length(magSpec)/2+1);
 
 %-Filter parameters
 numFilts  = 20;
+numCoeff  = 13;
 fftUnique = length(magSpec);
 lowFreq   = 800;
 highFreq  = 10000;
@@ -35,7 +36,12 @@ end
 %-Apply the filter bank
 filtBank = filtBank * magSpec;
 
+% Type III DCT matrix routine (see Eq. (5.14) on p.77 of [1])
+DCT = sqrt(2.0/numFilts) * cos( repmat([0:numCoeff-1].',1,numFilts) ...
+    .* repmat(pi*([1:numFilts]-0.5)/numFilts,numCoeff,1));
+
 %-Get the cepstral coefficients
-MFCCs = dct(log(filtBank));
+% MFCCs = dct(log(filtBank));
+MFCCs = DCT * log(filtBank);
 
 end
