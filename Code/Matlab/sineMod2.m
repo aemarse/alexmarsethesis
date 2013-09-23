@@ -26,10 +26,10 @@ for i = 1:NF
     [S] = getSTFT(frame, params);
     
     %-Sub-window it and get the stft of each window
-%     [subframes, FFT] = getSubFrames(frame, params);
+    [subframes, FFT] = getSubFrames(frame, params);
     
     %-Compute the sinusoids HERE
-    compSinusoids(S);
+    [vals, locs] = compSinusoids(FFT);
     
     %-Increment the indices
     startIdx = startIdx + H;
@@ -39,66 +39,72 @@ end
 
 end
 
-% function [subframe, FFT] = getSubFrames(frame, params)
-% 
-% NFs = floor((length(frame) - (params.Ns - params.Hs)) / params.Hs);
-% 
-% startIdx = 1;
-% endIdx   = params.Ns;
-% 
-% for i = 1:NFs
-%     
-%     subframe = frame(startIdx:endIdx);
-%     
-%     FFT(i,:) = getFFT(subframe, params);
-%     
-% end
-% 
-% end
-% 
-% function [FFT] = getFFT(frame, params)
-% 
-% FFT = abs(fft(frame, params.NFFTs));
-% 
-% end
+function [subframe, FFT] = getSubFrames(frame, params)
+
+NFs = floor((length(frame) - (params.Ns - params.Hs)) / params.Hs);
+
+startIdx = 1;
+endIdx   = params.Ns;
+
+for i = 1:NFs
+    
+    subframe = frame(startIdx:endIdx);
+    
+    FFT(i,:) = getFFT(subframe, params);
+    
+end
+
+end
+
+function [FFT] = getFFT(frame, params)
+
+FFT = abs(fft(frame, params.NFFTs));
+FFT = FFT(1:length(FFT)/2+1);
+
+end
 
 function [S] = getSTFT(frame, params)
 
 [S,F,T,P] = spectrogram(frame, params.Ns, params.Ns - params.Hs, ...
     params.NFFTs);
 
-% S = 20*log10(abs(S)+eps); %more deets
 S = abs(S);
-% temp = floor(size(S,1)/2);
-% S = S(1:temp,:);
-% F = F/abs(max(F))*params.fs;
-% F = F(1:temp);
-figure('name', params.filename)
-imagesc(T, F, S)
-axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
-title('Log magnitude spectrum')
+F = F/abs(max(F))*params.fs;
+% figure('name', params.filename)
+% imagesc(T, F, S)
+% axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
+% title('Log magnitude spectrum')
 
 end
 
-function [] = compSinusoids(S)
+function [vals, locs] = compSinusoids(FFT)
 
 %-Peak picking the STFT
-getPeaks(S);
+[vals, locs] = getPeaks(FFT);
 
 %-
 
+if size(vals,2) == 0
+    vals = zeros(size(vals,1),1);
+    locs = zeros(size(vals,1),1);
 end
 
-function [] = getPeaks(S)
+end
 
-numFrames = size(S, 2);
+function [vals, locs] = getPeaks(FFT)
+
+numFrames = size(FFT, 1);
+
+absThresh = -50;
 
 for i = 1:numFrames
     
-    [SSval, SSidx] = sort(S(:,i), 'descend');
+    %-Get dB
+    FFT(i,:) = 20*log10(FFT(i,:)+eps);
     
-    peaks(i,:) = SSval(1:5);
-    locs(i,:)  = SSidx(1:5);
+    %-Absolute amplitude threshold - 50dB
+    [peaks, locs(i,:)] = find(FFT(i,:) > absThresh);
+    vals(i,:) = FFT(locs(i,:));
     
 end
 
