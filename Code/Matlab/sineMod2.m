@@ -1,20 +1,15 @@
 function [] = sineMod2(sig, params)
 
 %-Params for the big win
-N      = params.N;
-H      = params.H;
-NF     = floor((length(sig) - (N - H)) / H);
-theWin = hamming(N);
-frame  = zeros(1,N);
+NF     = floor((length(sig) - (params.win.N - params.win.H)) / ...
+    params.win.H);
 
-%-Params for the small win
-params.Ns    = 256;
-params.Hs    = params.Ns/4;
-params.NFFTs = 1024;
+theWin = hamming(params.win.N);
+frame  = zeros(1,params.win.N);
 
 %-Indices for big window
 startIdx = 1;
-endIdx   = N;
+endIdx   = params.win.N;
 
 %-Loop through the number of frames
 for i = 1:NF
@@ -32,8 +27,8 @@ for i = 1:NF
     [vals, locs] = compSinusoids(FFT);
     
     %-Increment the indices
-    startIdx = startIdx + H;
-    endIdx   = endIdx + H;
+    startIdx = startIdx + params.win.H;
+    endIdx   = endIdx + params.win.H;
     
 end
 
@@ -41,10 +36,11 @@ end
 
 function [subframe, FFT] = getSubFrames(frame, params)
 
-NFs = floor((length(frame) - (params.Ns - params.Hs)) / params.Hs);
+NFs = floor((length(frame) - (params.win.Ns - params.win.Hs)) / ...
+    params.win.Hs);
 
 startIdx = 1;
-endIdx   = params.Ns;
+endIdx   = params.win.Ns;
 
 for i = 1:NFs
     
@@ -58,18 +54,18 @@ end
 
 function [FFT] = getFFT(frame, params)
 
-FFT = abs(fft(frame, params.NFFTs));
+FFT = abs(fft(frame, params.win.NFFTs));
 FFT = FFT(1:length(FFT)/2+1);
 
 end
 
 function [S] = getSTFT(frame, params)
 
-[S,F,T,P] = spectrogram(frame, params.Ns, params.Ns - params.Hs, ...
-    params.NFFTs);
+[S,F,T,P] = spectrogram(frame, params.win.Ns, params.win.Ns - ...
+    params.win.Hs, params.win.NFFTs);
 
 S = abs(S);
-F = F/abs(max(F))*params.fs;
+F = F/abs(max(F))*params.file.fs;
 % figure('name', params.filename)
 % imagesc(T, F, S)
 % axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')

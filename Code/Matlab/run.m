@@ -22,9 +22,14 @@ sig = sig/max(abs(sig));
 %--------------------------------------------------------------------------
 
 %-Windowing params
+%-Big win
 params.win.N    = N;
 params.win.H    = H;
 params.win.Nfft = Nfft;
+%-Small win
+params.win.Ns    = 256;
+params.win.Hs    = params.Ns/2;
+params.win.NFFTs = 1024;
 
 %-File params
 params.file.fs       = fs;
@@ -42,7 +47,7 @@ params.feat.maxFreq   = params.file.fs/2;
 %                           Get the features
 %--------------------------------------------------------------------------
 
-% sineMod2(sig, params);
+sineMod2(sig, params);
 
 [features] = getFrames(sig, params);
 
