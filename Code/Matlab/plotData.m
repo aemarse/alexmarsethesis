@@ -1,4 +1,4 @@
-function [] = plotData(sig, features, params, fs)
+function [] = plotData(sig, features, params)
 
 % try
 %     [sig fs] = wavread(filename);
@@ -40,7 +40,7 @@ subplot(3,1,3), plot(features.ZCR); ...
 %                               Plot FFT
 %--------------------------------------------------------------------------
 
-[S, F, T] = spectrogram(sig, params.N, params.H, params.Nfft);
+[S, F, T] = spectrogram(sig, params.win.N, params.win.H, params.win.Nfft);
 
 S = 20*log10(abs(S)+eps);
 % S = abs(S);
@@ -49,11 +49,11 @@ temp = floor(size(S,1)/2);
 
 S = S(1:temp,:);
 
-F = F/abs(max(F))*fs;
+F = F/abs(max(F))*params.file.fs;
 
 F = F(1:temp);
 
-figure('name', params.filename)
+figure('name', params.file.filename)
 imagesc(T, F, S)
 axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
 title('Log magnitude spectrum')

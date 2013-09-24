@@ -1,6 +1,7 @@
 %-NEXT STEPS
 %--implement minPkDist and minPkHt to improve peak picking
 %--incoporate w/ sineMod2
+%--do 1st derivative
 
 load('/Users/aemarse/Documents/devel/Thesis/Code/Matlab/testing.mat');
 

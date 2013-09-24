@@ -5,7 +5,7 @@ denom = 0;
 
 for i = 1:length(past) - 1
     
-    idx = i * params.fs/2;
+    idx = i * params.file.fs/2;
     
     num   = num + (past(i)*idx);
     denom = num + past(i);

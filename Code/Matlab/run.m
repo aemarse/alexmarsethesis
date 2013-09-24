@@ -1,33 +1,58 @@
 function [] = run(filename, N, H, Nfft)
 
+%-Read in the file
 fileDir  = '/Volumes/ALEX/data/xeno_canto/';
-
 [sig fs] = readFile(fileDir, filename);
 
+%-Collapse into mono
 if size(sig, 2) == 2
     sig = (sig(:,1) + sig(:,2) / 2);
 end
 
+%-Band pass filter
 % fc1 = 500/fs;
 % fc2 = 8000/fs;
-% 
 % sig = filterSig(sig, fc1, fc2);
 
+%-Normalize
 sig = sig/max(abs(sig));
 
-params.N        = N;
-params.H        = H;
-params.Nfft     = Nfft;
-params.fs       = fs;
-params.filename = filename;
+%--------------------------------------------------------------------------
+%                           Set the parameters
+%--------------------------------------------------------------------------
+
+%-Windowing params
+params.win.N    = N;
+params.win.H    = H;
+params.win.Nfft = Nfft;
+
+%-File params
+params.file.fs       = fs;
+params.file.filename = filename;
+
+%-Feature params
+params.feat.numFilts  = 20;
+params.feat.numCoeff  = 13;
+params.feat.lowFreq   = 800;
+params.feat.highFreq  = 10000;
+params.feat.minFreq   = 0;
+params.feat.maxFreq   = params.file.fs/2;
+
+%--------------------------------------------------------------------------
+%                           Get the features
+%--------------------------------------------------------------------------
 
 % sineMod2(sig, params);
 
 [features] = getFrames(sig, params);
 
-plotData(sig, features, params, fs);
+%--------------------------------------------------------------------------
+%                            Plot the data
+%--------------------------------------------------------------------------
 
-sound(sig, fs);
+plotData(sig, features, params);
+
+sound(sig, params.file.fs);
 
 end
 

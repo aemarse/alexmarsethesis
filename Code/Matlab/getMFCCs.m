@@ -1,18 +1,19 @@
-function [MFCCs] = getMFCCs(magSpec, fs)
+function [MFCCs] = getMFCCs(magSpec, params)
 
 magSpec = magSpec(1:length(magSpec)/2+1);
 
 %-Filter parameters
-numFilts  = 20;
-numCoeff  = 13;
+numFilts  = params.feat.numFilts;
+numCoeff  = params.feat.numCoeff;
 fftUnique = length(magSpec);
-lowFreq   = 800;
-highFreq  = 10000;
+lowFreq   = params.feat.lowFreq;
+highFreq  = params.feat.highFreq;
 freqRange = [lowFreq highFreq];
 
 minFreq = 0;
-maxFreq = fs/2;
+maxFreq = params.file.fs/2;
 
+%-Freq stuff
 linFreq    = linspace(minFreq,maxFreq,fftUnique);
 melFreq    = convToMel(linFreq);
 cutFreqsHz = convToHertz( convToMel(lowFreq)+[0:numFilts+1] * ...
@@ -33,15 +34,18 @@ for i = 1:numFilts
         / (cutFreqsHz(i+2) - cutFreqsHz(i+1));
 end
 
-%-Apply the filter bank
+%-Apply the filter bank to the magnitude spectrum
 filtBank = filtBank * magSpec;
 
-% Type III DCT matrix routine (see Eq. (5.14) on p.77 of [1])
+% Make the DCT matrix
 DCT = sqrt(2.0/numFilts) * cos( repmat([0:numCoeff-1].',1,numFilts) ...
     .* repmat(pi*([1:numFilts]-0.5)/numFilts,numCoeff,1));
 
 %-Get the cepstral coefficients
-% MFCCs = dct(log(filtBank));
-MFCCs = DCT * log(filtBank);
+MFCCs = DCT * log10(filtBank);
+
+%-Plot the MFCC matrix
+% imagesc( [1:length(MFCCs)], [0:numCoeff-1], MFCCs );
+% set(gca, 'YDir', 'normal');
 
 end

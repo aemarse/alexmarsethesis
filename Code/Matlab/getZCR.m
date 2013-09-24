@@ -8,7 +8,7 @@ Thoughts:
 
 %}
 
-N = params.N;
+N = params.win.N;
 
 crossed  = zeros(1,N);
 crossIdx = zeros(1,N);
@@ -32,7 +32,7 @@ for i = 1:N
 end
 
 numZCs    = length(find(crossed));
-numPerSec = numZCs * params.fs/N;
+numPerSec = numZCs * params.file.fs/N;
 freq      = numPerSec / 2;
 
 % ZCR.numZCs    = numZCs;

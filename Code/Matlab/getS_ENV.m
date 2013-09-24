@@ -1,7 +1,7 @@
 function [S_ENV] = getS_ENV(fft, params)
 
 N   = 5;
-fc1 = 5000/params.fs;
+fc1 = 5000/params.file.fs;
 
 [b, a] = butter(N, fc1, 'low');
 
