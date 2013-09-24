@@ -18,13 +18,15 @@ for i = 1:NF
     frame = sig(startIdx:endIdx) .* theWin;
     
     %-Get the stft
-    [S] = getSTFT(frame, params);
+%     [S] = getSTFT(frame, params);
     
-    %-Sub-window it and get the stft of each window
-    [subframes, FFT] = getSubFrames(frame, params);
+    %-Sub-window it and get the fft of each window
+    [FFT] = getPeaksOfFFT(frame, params);
+    
+    
     
     %-Compute the sinusoids HERE
-    [vals, locs] = compSinusoids(FFT);
+%     [vals, locs] = compSinusoids(FFT);
     
     %-Increment the indices
     startIdx = startIdx + params.win.H;
@@ -34,74 +36,98 @@ end
 
 end
 
-function [subframe, FFT] = getSubFrames(frame, params)
+%--------------------------------------------------------------------------
+%                           Helper functions
+%--------------------------------------------------------------------------
 
+%-Get the subframe FFT
+function [theFFT] = getPeaksOfFFT(frame, params)
+
+%-Compute the number of subframes
 NFs = floor((length(frame) - (params.win.Ns - params.win.Hs)) / ...
     params.win.Hs);
 
+%-Windowing incdices
 startIdx = 1;
 endIdx   = params.win.Ns;
 
+%-Loop through the num of subframes
 for i = 1:NFs
     
+    %-Grab a subframe
     subframe = frame(startIdx:endIdx);
     
-    FFT(i,:) = getFFT(subframe, params);
+    %-Get the FFT of the subframes
+    FFT = abs(fft(subframe, params.win.NFFTs));
+    
+    %-Store only the unique portion of the FFT
+    theFFT(i,:) = FFT(1:length(FFT)/2+1);
+    
+    %-Get the values and locations of the top 5 peaks in the FFT
+    [peaks(i,:), locs(i,:)] = peakPick(theFFT(i,:), params);
+    
+    startIdx = startIdx + params.win.Hs;
+    endIdx   = endIdx + params.win.Hs;
     
 end
 
-end
+%-Track the sinusoids
 
-function [FFT] = getFFT(frame, params)
-
-FFT = abs(fft(frame, params.win.NFFTs));
-FFT = FFT(1:length(FFT)/2+1);
 
 end
 
-function [S] = getSTFT(frame, params)
+%-Compute the sinusoids
+% function [vals, locs] = compSinusoids(FFT)
+% 
+% %-Peak picking the STFT
+% % [vals, locs] = getPeaks(FFT);
+% 
+% %-
+% 
+% % if size(vals,2) == 0
+% %     vals = zeros(size(vals,1),1);
+% %     locs = zeros(size(vals,1),1);
+% % end
+% 
+% end
 
-[S,F,T,P] = spectrogram(frame, params.win.Ns, params.win.Ns - ...
-    params.win.Hs, params.win.NFFTs);
+%-Peak pick the FFT
+% function [vals, locs] = getPeaks(FFT)
+% 
+% numFrames = size(FFT, 1);
+% 
+% absThresh = -50;
+% 
+% for i = 1:numFrames
+%     
+%     %-Get dB
+%     FFT(i,:) = 20*log10(FFT(i,:)+eps);
+%     
+%     %-Absolute amplitude threshold - 50dB
+%     [peaks, locs(i,:)] = find(FFT(i,:) > absThresh);
+%     vals(i,:) = FFT(locs(i,:));
+%     
+% end
+% 
+% end
 
-S = abs(S);
-F = F/abs(max(F))*params.file.fs;
-% figure('name', params.filename)
-% imagesc(T, F, S)
-% axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
-% title('Log magnitude spectrum')
-
-end
-
-function [vals, locs] = compSinusoids(FFT)
-
-%-Peak picking the STFT
-[vals, locs] = getPeaks(FFT);
-
-%-
-
-if size(vals,2) == 0
-    vals = zeros(size(vals,1),1);
-    locs = zeros(size(vals,1),1);
-end
-
-end
-
-function [vals, locs] = getPeaks(FFT)
-
-numFrames = size(FFT, 1);
-
-absThresh = -50;
-
-for i = 1:numFrames
-    
-    %-Get dB
-    FFT(i,:) = 20*log10(FFT(i,:)+eps);
-    
-    %-Absolute amplitude threshold - 50dB
-    [peaks, locs(i,:)] = find(FFT(i,:) > absThresh);
-    vals(i,:) = FFT(locs(i,:));
-    
-end
-
-end
+% function [FFT] = getFFT(frame, params)
+% 
+% FFT = abs(fft(frame, params.win.NFFTs));
+% FFT = FFT(1:length(FFT)/2+1);
+% 
+% end
+% 
+% function [S] = getSTFT(frame, params)
+% 
+% [S,F,T,P] = spectrogram(frame, params.win.Ns, params.win.Ns - ...
+%     params.win.Hs, params.win.NFFTs);
+% 
+% S = abs(S);
+% F = F/abs(max(F))*params.file.fs;
+% % figure('name', params.filename)
+% % imagesc(T, F, S)
+% % axis xy, colormap(jet), ylabel('Frequency'), xlabel('Time')
+% % title('Log magnitude spectrum')
+% 
+% end

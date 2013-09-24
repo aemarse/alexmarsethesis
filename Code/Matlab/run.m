@@ -21,27 +21,31 @@ sig = sig/max(abs(sig));
 %                           Set the parameters
 %--------------------------------------------------------------------------
 
-%-Windowing params
+%-WINDOWING
 %-Big win
 params.win.N    = N;
 params.win.H    = H;
 params.win.Nfft = Nfft;
 %-Small win
 params.win.Ns    = 256;
-params.win.Hs    = params.Ns/2;
+params.win.Hs    = params.win.Ns/2;
 params.win.NFFTs = 1024;
 
-%-File params
+%-FILE
 params.file.fs       = fs;
 params.file.filename = filename;
 
-%-Feature params
+%-FEATURE
+%-mfcc
 params.feat.numFilts  = 20;
 params.feat.numCoeff  = 13;
 params.feat.lowFreq   = 800;
 params.feat.highFreq  = 10000;
 params.feat.minFreq   = 0;
 params.feat.maxFreq   = params.file.fs/2;
+%-sinusoidal modeling
+params.feat.numPeaks = 5;
+params.feat.maxDist  = 5;
 
 %--------------------------------------------------------------------------
 %                           Get the features
