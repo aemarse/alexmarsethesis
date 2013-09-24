@@ -20,10 +20,8 @@ for i = 1:NF
     %-Get the stft
 %     [S] = getSTFT(frame, params);
     
-    %-Sub-window it and get the fft of each window
-    [FFT] = getPeaksOfFFT(frame, params);
-    
-    
+    %-Compute the sinusoids
+    computeSinusoids(frame, params);
     
     %-Compute the sinusoids HERE
 %     [vals, locs] = compSinusoids(FFT);
@@ -40,12 +38,15 @@ end
 %                           Helper functions
 %--------------------------------------------------------------------------
 
-%-Get the subframe FFT
-function [theFFT] = getPeaksOfFFT(frame, params)
+%-Compute the sinusoids for modeling
+function [] = computeSinusoids(frame, params)
 
 %-Compute the number of subframes
 NFs = floor((length(frame) - (params.win.Ns - params.win.Hs)) / ...
     params.win.Hs);
+
+pkDiff    = zeros(NFs-1, params.feat.numPeaks);
+trackBool = zeros(NFs-1, params.feat.numPeaks);
 
 %-Windowing incdices
 startIdx = 1;
@@ -63,16 +64,39 @@ for i = 1:NFs
     %-Store only the unique portion of the FFT
     theFFT(i,:) = FFT(1:length(FFT)/2+1);
     
-    %-Get the values and locations of the top 5 peaks in the FFT
+    %-Get the values and locations of the top 5 peaks in theFFT
     [peaks(i,:), locs(i,:)] = peakPick(theFFT(i,:), params);
     
+    %-Track the sinusoids
+    
+    if i > 1
+        
+        %-Absolute difference b/t sinusoids of neighboring fft frames
+        pkDiff(i,:) = abs(locs(i,:) - locs(i-1,:));
+        
+        %-Test the diffs against a threshold
+        trackBool(i,:) = pkDiff(i,:) <= params.feat.maxDist;
+        
+        %-Construct a vector w/ the tracked peak bins present
+        for h = 1:size(pkDiff,2)
+            if trackBool(i,h) == 1
+                amps(i-1,h)    = peaks(i-1,h);
+                amps(i,h)      = peaks(i,h);
+                fftBins(i-1,h) = locs(i-1,h);
+                fftBins(i,h)   = locs(i,h);
+            end
+        end
+        
+    end
+    
+    %-Increment the windowing indices
     startIdx = startIdx + params.win.Hs;
     endIdx   = endIdx + params.win.Hs;
     
 end
 
-%-Track the sinusoids
-
+pkDiff    = pkDiff(2:end,:);
+trackBool = trackBool(2:end,:);
 
 end
 
