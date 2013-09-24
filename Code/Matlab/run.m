@@ -51,8 +51,13 @@ params.feat.maxDist  = 5;
 %                           Get the features
 %--------------------------------------------------------------------------
 
-sineMod2(sig, params);
+% sineMod2(sig, params);
 
+%-Get the triangular filter bank to be used with the MFCCs
+filtBank             = getTrifbank( params );
+params.feat.filtBank = filtBank;
+
+%-Feature computation
 [features] = getFrames(sig, params);
 
 %--------------------------------------------------------------------------
@@ -65,6 +70,11 @@ sound(sig, params.file.fs);
 
 end
 
+%--------------------------------------------------------------------------
+%                          Utility functions
+%--------------------------------------------------------------------------
+
+%-Read in the file
 function [sig fs] = readFile(fileDir, filename)
 
 a = dir(fileDir);

@@ -14,7 +14,7 @@ close all
 %--------------------------------------------------------------------------
 %                               Plot RMS
 %--------------------------------------------------------------------------
-figure('name', params.filename)
+figure('name', params.file.filename)
 
 numPlots = length(features) - 1;
 
