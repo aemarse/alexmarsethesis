@@ -44,14 +44,14 @@ params.feat.highFreq  = 10000;
 params.feat.minFreq   = 0;
 params.feat.maxFreq   = params.file.fs/2;
 %-sinusoidal modeling
-params.feat.numPeaks = 5;
+params.feat.numPeaks = 10;
 params.feat.maxDist  = 5;
 
 %--------------------------------------------------------------------------
 %                           Get the features
 %--------------------------------------------------------------------------
 
-% sineMod2(sig, params);
+sineMod2(sig, params);
 
 %-Get the triangular filter bank to be used with the MFCCs
 filtBank             = getTrifbank( params );
