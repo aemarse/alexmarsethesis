@@ -19,7 +19,25 @@ for i = 1:NF
 %     [S] = getSTFT(frame, params);
     
     %-Compute the sinusoids
-    [amps, bins, phase] = computeSinusoids(frame, params);
+%     [amps, bins, phase] = computeSinusoids(frame, params);
+    
+    %-Get the FFT of the frame
+    FFT = fft(frame, params.win.Nfft);
+    
+    %-Store only the unique portion of the FFT
+    magSpec = abs(FFT(1:length(FFT)/2+1));
+    
+    %-Get the values and locations of the top 5 peaks in theFFT
+    [peaks(i,:), locs(i,:)] = peakPick(magSpec, params);
+    
+    if i > 1
+        %-Track the peaks
+        [theAmps(i,:), theFreqs(i,:)] = ...
+            peakTrack(peaks, locs, params, i);
+    end
+    
+    theTimes(i) = endIdx;
+    theTimesMs(i) = endIdx/params.file.fs*1000;
     
     %-Compute the sinusoids HERE
 %     [vals, locs] = compSinusoids(FFT);
@@ -30,11 +48,68 @@ for i = 1:NF
     
 end
 
+theAmps  = theAmps(2:end, :);
+theFreqs = theFreqs(2:end, :);
+
+theFreqs = theFreqs * params.file.fs/2 / (params.win.Nfft/2+1);
+
+oneAmp  = theAmps(:,1);
+oneFreq = theFreqs(:,1);
+
+%-Write to file
+
+
+%-Figure out the envelope and make the signal OR write freqs and amps file
+
+%-Track the peaks
+% [theAmps, theFreqs] = peakTrack(peaks, locs, params);
+
 end
 
 %--------------------------------------------------------------------------
 %                           Helper functions
 %--------------------------------------------------------------------------
+
+%-Version 2
+function [theAmps, theBins, thePhase] = computePeaks(frame, params)
+
+pkDiff    = zeros(1, params.feat.numPeaks);
+trackBool = zeros(1, params.feat.numPeaks);
+
+%-Get the values and locations of the top 5 peaks in theFFT
+[peaks, locs] = peakPick(magSpec, params);
+
+% %-Track the sinusoids
+%     if i > 1
+%         
+%         %-Absolute difference b/t sinusoids of neighboring fft frames
+%         pkDiff(i,:) = abs(locs(i,:) - locs(i-1,:));
+%         
+%         %-Test the diffs against a threshold
+%         trackBool(i,:) = pkDiff(i,:) <= params.feat.maxDist;
+%         
+%         %-Construct a vector w/ the only tracked peak freq bins
+%         for h = 1:size(pkDiff,2)
+%             if trackBool(i,h) == 1
+%                 theAmps(i-1,h)  = peaks(i-1,h);
+%                 theAmps(i,h)    = peaks(i,h);
+%                 theBins(i-1,h)  = locs(i-1,h);
+%                 theBins(i,h)    = locs(i,h);
+%                 thePhase(i-1,h) = fftPhase(locs(i-1,h));
+%                 thePhase(i,h)   = fftPhase(locs(i,h));
+%             end
+%         end
+%         
+%     end
+
+pkDiff    = pkDiff(2:end,:);
+trackBool = trackBool(2:end,:);
+
+% yAmp = interp(amps, floor(params.win.Ns/length(amps)));
+% yFreq = interp((theBins(1:end, 1)*(params.file.fs/2))/(params.win.Nfft/2+1), floor(params.win.Ns/length(theBins(1:end,1))));
+% yPhase = interp(unwrap(thePhase(1:end, 1)), floor(params.win.Ns/length(theBins(1:end,1))));
+
+end
 
 %-Compute the sinusoids for modeling
 function [theAmps, theBins, thePhase] = computeSinusoids(frame, params)

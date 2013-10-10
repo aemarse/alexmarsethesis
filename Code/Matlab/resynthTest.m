@@ -1,6 +1,6 @@
-load('/Users/aemarse/Documents/devel/Thesis/Code/Matlab/resynthesis.mat')
+load('/Users/aemarse/Documents/devel/Thesis/Code/Matlab/resynthesis2.mat')
 
-theFreqs = theBins * params.file.fs/2 / (params.win.Nfft/2+1);
+theFreqs = theFreqs * params.file.fs/2 / (params.win.Nfft/2+1);
 freqOsc1 = theFreqs(1:end, 1);
 % yFreq    = interp( freqOsc1, ceil(params.win.Ns/length(freqOsc1)));
 yFreq    = interp( freqOsc1, ceil(params.file.fs/length(freqOsc1)));

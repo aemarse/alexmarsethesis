@@ -1,4 +1,4 @@
-function [peaks, locs] = peakPick(FFT, params)
+function [peaks, locs, pkVal, pkLoc] = peakPick(FFT, params)
 
 %-NEXT STEPS
 %--implement minPkDist and minPkHt to improve peak picking

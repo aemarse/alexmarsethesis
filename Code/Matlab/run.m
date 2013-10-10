@@ -2,7 +2,11 @@ function [] = run(filename, N, H, Nfft)
 
 %-Read in the file
 fileDir  = '/Volumes/ALEX/data/xeno_canto/';
-[sig fs] = readFile(fileDir, filename);
+[sig fs fileName] = readFile(fileDir, filename);
+
+%-Get the mat filename and load in the mat
+matFilename = [fileName(1:end-3) 'mat'];
+load(matFilename);
 
 %-Collapse into mono
 if size(sig, 2) == 2
@@ -48,23 +52,40 @@ params.feat.numPeaks = 10;
 params.feat.maxDist  = 5;
 
 %--------------------------------------------------------------------------
+%                                 AED
+%--------------------------------------------------------------------------
+
+[pkLocs pkVals] = aed(sig, params);
+
+%--------------------------------------------------------------------------
 %                           Get the features
 %--------------------------------------------------------------------------
 
-sineMod2(sig, params);
+%-Get the MFCCs
+MFCCs = calcMFCCs(sig, params);
+
+%-Sinusoidal modeling
+% sineMod2(sig, params);
+[tracks, resynth] = sineMod4(sig, params);
 
 %-Get the triangular filter bank to be used with the MFCCs
-filtBank             = getTrifbank( params );
-params.feat.filtBank = filtBank;
+% filtBank             = getTrifbank( params );
+% params.feat.filtBank = filtBank;
 
 %-Feature computation
-[features] = getFrames(sig, params);
+% [features] = getFrames(sig, params);
+
+%--------------------------------------------------------------------------
+%                      Write the data to a struct
+%--------------------------------------------------------------------------
+
+
 
 %--------------------------------------------------------------------------
 %                            Plot the data
 %--------------------------------------------------------------------------
 
-plotData(sig, features, params);
+% plotData(sig, features, params);
 
 sound(sig, params.file.fs);
 
@@ -75,7 +96,7 @@ end
 %--------------------------------------------------------------------------
 
 %-Read in the file
-function [sig fs] = readFile(fileDir, filename)
+function [sig fs filename] = readFile(fileDir, filename)
 
 a = dir(fileDir);
 b = struct2cell(a);
