@@ -25,17 +25,17 @@ end
 %------Need to normalize to 0dB
 
 %-LPF the stse function
-[b,a] = butter(5,0.025,'low');
+[b,a] = butter(5,0.015,'low');
 stse  = filter(b,a,stse);
 
 %-Peak pick the stse function
-[pks locs pkVal pkLoc] = peakPick(stse, params);
+[pks locs pkVal pkLoc thePkVal thePkLoc] = peakPick(stse, params);
 
 subplot(2,1,1),plot(sig); axis tight;
 subplot(2,1,2),plot(stse); axis tight; hold on;
-subplot(2,1,2),plot(pkLoc, pkVal, 'rx');
+subplot(2,1,2),plot(thePkLoc, thePkVal, 'rx');
 
-sound(sig, params.file.fs);
+% sound(sig, params.file.fs);
 
 %------Need to do the noise level estimate
 En0    = min(stse);

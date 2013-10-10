@@ -1,4 +1,5 @@
-function [peaks, locs, pkVal, pkLoc] = peakPick(FFT, params)
+function [peaks, locs, pkVal, pkLoc, thePkVal, thePkLoc] = ...
+    peakPick(FFT, params)
 
 %-NEXT STEPS
 %--implement minPkDist and minPkHt to improve peak picking
@@ -14,6 +15,9 @@ currDn   = 0;
 pastDn   = 0;
 numPeaks = params.feat.numPeaks;
 pkCnt    = 1;
+
+minDist = params.file.fs*40/1000; %-the min distance b/t peaks
+% minDist = 500;
 
 %Initialize the values
 pkLoc = 0;
@@ -51,6 +55,31 @@ for i = 1:length(FFT)
     pastVal = currVal;
     pastUp  = currUp;
     pastDn  = currDn;
+    
+end
+
+%-Get rid of the peaks 
+newPkCnt = 1;
+
+for i = 2:2:length(pkLoc)
+    
+    pkDist = pkLoc(i) - pkLoc(i-1);
+    
+    %-If the peaks are too close together
+    if pkDist < minDist
+        
+        %-Count the one that is larger
+        if pkVal(i) > pkVal(i-1)
+            thePkLoc(newPkCnt) = pkLoc(i);
+            thePkVal(newPkCnt) = pkVal(i);
+        else
+            thePkLoc(newPkCnt) = pkLoc(i-1);
+            thePkVal(newPkCnt) = pkVal(i-1);
+        end
+        
+        newPkCnt = newPkCnt + 1;
+        
+    end
     
 end
 
