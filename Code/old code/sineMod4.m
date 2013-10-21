@@ -31,7 +31,7 @@ xlabel('Time');ylabel('Frequency');title('Original spectrum w/ tracked peaks');
 dr1 = synthtrax(F,M/64,fs,256,128); % Divide M by 64 to factor out window, FFT weighting
 subplot(2,1,2), specgram(dr1,256,fs);
 xlabel('Time');ylabel('Frequency');title('Resynthesized');
-% sound(dr1,fs)
-% sound(sig,fs)
+sound(dr1,fs)
+sound(sig,fs)
 
 end

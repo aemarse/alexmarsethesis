@@ -55,6 +55,7 @@ params.feat.maxDist  = 5;
 %                                 AED
 %--------------------------------------------------------------------------
 
+% aedTest(sig, params);
 [pkLocs pkVals] = aed(sig, params);
 
 %--------------------------------------------------------------------------
@@ -62,7 +63,7 @@ params.feat.maxDist  = 5;
 %--------------------------------------------------------------------------
 
 %-Get the MFCCs
-MFCCs = calcMFCCs(sig, params);
+% MFCCs = calcMFCCs(sig, params);
 
 %-Sinusoidal modeling
 % sineMod2(sig, params);
@@ -95,43 +96,43 @@ end
 %                          Utility functions
 %--------------------------------------------------------------------------
 
-%-Read in the file
-function [sig fs filename] = readFile(fileDir, filename)
-
-a = dir(fileDir);
-b = struct2cell(a);
-
-for i = 4:size(b,2)
-    tempDir = [fileDir b{1,i} '/'];
-    
-    x = struct2cell(dir(tempDir));
-    
-    for h = 1:size(x,2)
-        if strcmp(x{1,h}, filename)
-            theDir = tempDir;
-        end
-    end
-end
-
-filename = sprintf('%s%s', theDir, filename);
-
-if strcmp(filename(end-2:end), 'mp3')
-    try
-        [sig fs] = mp3read(filename);
-    catch
-        r = removeFile(filename);
-        return
-    end
-elseif strcmp(filename(end-2:end), 'wav')
-    try
-        [sig fs] = wavread(filename);
-    catch
-        r = removeFile(filename);
-        return
-    end
-else
-    sprintf('Couldn''t read the file, for some unknown reason...must be a ghost!')
-    return
-end
-
-end
+% %-Read in the file
+% function [sig fs filename] = readFile(fileDir, filename)
+% 
+% a = dir(fileDir);
+% b = struct2cell(a);
+% 
+% for i = 4:size(b,2)
+%     tempDir = [fileDir b{1,i} '/'];
+%     
+%     x = struct2cell(dir(tempDir));
+%     
+%     for h = 1:size(x,2)
+%         if strcmp(x{1,h}, filename)
+%             theDir = tempDir;
+%         end
+%     end
+% end
+% 
+% filename = sprintf('%s%s', theDir, filename);
+% 
+% if strcmp(filename(end-2:end), 'mp3')
+%     try
+%         [sig fs] = mp3read(filename);
+%     catch
+%         r = removeFile(filename);
+%         return
+%     end
+% elseif strcmp(filename(end-2:end), 'wav')
+%     try
+%         [sig fs] = wavread(filename);
+%     catch
+%         r = removeFile(filename);
+%         return
+%     end
+% else
+%     sprintf('Couldn''t read the file, for some unknown reason...must be a ghost!')
+%     return
+% end
+% 
+% end

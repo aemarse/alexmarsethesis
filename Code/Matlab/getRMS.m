@@ -1,5 +1,9 @@
-function [RMS] = getRMS(frame)
+function [rms] = getRMS(buf, numFrames)
 
-RMS = sqrt(mean((frame .^ 2)));
+rms = zeros(numFrames,1);
+
+for i = 1:numFrames
+   rms(i) = sqrt(mean(buf(i,:) .^ 2));
+end
 
 end
